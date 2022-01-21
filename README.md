@@ -9,4 +9,4 @@ This repository contains "Scheduler" project-package.
 - Await HTTP:
 - - Call function when HTTP request is completed (function will give you result). [scheduler(f).http(http_get(...))]
 
-Read more at <a href="https://github.com/kirillzhosul/gamemaker-scheduler/tree/main/src/Scheduler/notes/SCHEDULER_DOCUMENTATION/SCHEDULER_DOCUMENTATION.txt">Documentation</a>!
+Read more at [Documentation](src/Scheduler/notes/SCHEDULER_DOCUMENTATION/SCHEDULER_DOCUMENTATION.txt)!
