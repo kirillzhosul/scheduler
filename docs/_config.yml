@@ -1,1 +1,6 @@
 theme: jekyll-theme-cayman
+
+title: Game Maker Scheduler
+description: Package to schedule tasks (functions). Delay / repeat call, await async HTTP requests.
+
+show_downloads: true
