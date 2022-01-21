@@ -1,7 +1,7 @@
 {
   "parent": {
     "name": "Scheduler",
-    "path": "Scheduler.yyp",
+    "path": "folders/Scheduler.yy",
   },
   "resourceVersion": "1.1",
   "name": "SCHEDULER_DESCRIPTION",

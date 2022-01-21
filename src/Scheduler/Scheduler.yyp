@@ -1,12 +1,12 @@
 {
   "resources": [
-    {"id":{"name":"SCHEDULER_VERSION","path":"notes/SCHEDULER_VERSION/SCHEDULER_VERSION.yy",},"order":1,},
+    {"id":{"name":"SCHEDULER_VERSION","path":"notes/SCHEDULER_VERSION/SCHEDULER_VERSION.yy",},"order":3,},
     {"id":{"name":"scrScheduler","path":"scripts/scrScheduler/scrScheduler.yy",},"order":0,},
     {"id":{"name":"oSchedulerController","path":"objects/oSchedulerController/oSchedulerController.yy",},"order":0,},
     {"id":{"name":"oSchedulerExample","path":"objects/oSchedulerExample/oSchedulerExample.yy",},"order":1,},
-    {"id":{"name":"SCHEDULER_DOCUMENTATION","path":"notes/SCHEDULER_DOCUMENTATION/SCHEDULER_DOCUMENTATION.yy",},"order":4,},
-    {"id":{"name":"SCHEDULER_LICENSE","path":"notes/SCHEDULER_LICENSE/SCHEDULER_LICENSE.yy",},"order":3,},
-    {"id":{"name":"SCHEDULER_DESCRIPTION","path":"notes/SCHEDULER_DESCRIPTION/SCHEDULER_DESCRIPTION.yy",},"order":2,},
+    {"id":{"name":"SCHEDULER_DOCUMENTATION","path":"notes/SCHEDULER_DOCUMENTATION/SCHEDULER_DOCUMENTATION.yy",},"order":5,},
+    {"id":{"name":"SCHEDULER_LICENSE","path":"notes/SCHEDULER_LICENSE/SCHEDULER_LICENSE.yy",},"order":6,},
+    {"id":{"name":"SCHEDULER_DESCRIPTION","path":"notes/SCHEDULER_DESCRIPTION/SCHEDULER_DESCRIPTION.yy",},"order":4,},
     {"id":{"name":"rmSchedulerExample","path":"rooms/rmSchedulerExample/rmSchedulerExample.yy",},"order":0,},
   ],
   "Options": [
