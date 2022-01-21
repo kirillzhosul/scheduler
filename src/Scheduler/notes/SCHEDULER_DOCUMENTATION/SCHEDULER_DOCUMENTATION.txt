@@ -3,6 +3,13 @@ to add modifications, like run after more delay, chain like `schedule(f, [params
 read more about specific chain operations, and other stuff.
 
 
+0. Examples:
+- scheduler(instance_destroy).after(room_speed * 3).
+- scheduler(function(){...}).every(room_speed * 1).
+- scheduler(function(){...}).after(room_speed * 3).every(room_speed * 1).
+- scheduler(function(r){...}).http(http_get("https://google.com/"))
+
+
 1. Aliases.
 - Every chain operation have alias, which used like `after(N, f, [params])`, aliases may used for more simple task creation,
 - aliases also returns chain, so you may do `after(N, f, [params]).every(N)`.
@@ -29,8 +36,14 @@ read more about specific chain operations, and other stuff.
 -- also will stop ticking (`every`, `after` will not work).
 
 
-2 Examples:
-- scheduler(instance_destroy).after(room_speed * 3).
-- scheduler(function(){...}).every(room_speed * 1).
-- scheduler(function(){...}).after(room_speed * 3).every(room_speed * 1).
-- scheduler(function(r){...}).http(http_get("https://google.com/"))
+4. Callbacks result.
+- For `after` tasks:
+-- If callback returns undefined (or not returns any), this will be simply mark task as completed and delete it.
+-- If callback returns false, this will retry callback after next frame.
+-- If callback returns true, this will restart task, from base `after` delay.
+- For `every` tasks:
+-- If callback returns undefined (or not returns any), this will be simply continue every execution.
+-- If callback returns any other, this will stop executing every frame (By marking task as completed).
+- For `http` tasks:
+-- Not applicable.
+

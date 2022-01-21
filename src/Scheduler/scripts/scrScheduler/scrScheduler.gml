@@ -347,6 +347,7 @@ function __scheduler_task_chain_operation_every(delay){
 	
 	return self; // Returning chain.
 }
+
 #endregion
 
 #endregion
