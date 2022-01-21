@@ -1,0 +1,8 @@
+
+Project is "Open-Source", if you want to create issue, or create pull request with your feature, 
+source code (repository) may be found at GitHub at:
+- https://github.com/kirillzhosul/gamemaker-scheduler
+	
+Author / Maintainer of the project:
+- Kirill Zhosul (@kirillzhosul).
+- https://kirillzhosul.github.io/
