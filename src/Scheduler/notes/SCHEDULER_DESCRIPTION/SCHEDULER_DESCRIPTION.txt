@@ -1,36 +1,18 @@
-To create new scheduler task, simply write `schedule(f, [params])`, that will create new task that will be executed at next frame,
-to add modifications, like run after more delay, chain like `schedule(f, [params]).after(N)` where N - amount of frames to delay,
-read more about specific chain operations, and other stuff.
+This folder* contains "Scheduler" project-package.
+
+"Scheduler" allows you to:
+- Delay / repeat:
+-- Delay function calls for given `N` amount of frames [scheduler(f).after(n)],
+-- Repeat function calls for given `N` amount of frames [scheduler(f).every(n)],
+-- Or, all at once (repeat function every `N` frames, after `N` frames) [scheduler(f).after(n).every(n)],
+- Await HTTP:
+-- Call function when HTTP request is completed (function will give you result). [scheduler(f).http(http_get(...))]
 
 
-1. Aliases.
-- Every chain operation have alias, which used like `after(N, f, [params])`, aliases may used for more simple task creation,
-- aliases also returns chain, so you may do `after(N, f, [params]).every(N)`.
-
-
-1.1 List of aliases.
-- `after(N, f, [params])`;
-- `every(N, f, [params])`;
-- `http(request_id, f, [params])`;
-
-
-2. Chain entry point (`schedule(f, [params])`).
-- All chains should start from `schedule(f, [params])` which will be create new chain (shedule task),
-- after that, you may chain to other chain operations.
-
-
-3. Chain operations.
-- `*.after(N)`
--- Will execute task after given N frames.
-- `*.every(N)`
--- Will execute task every given N frames.
-- `*.http(request_id)`
--- Will execute task after HTTP response is come.
--- also will stop ticking (`every`, `after` will not work).
-
-
-2 Examples:
-- scheduler(instance_destroy).after(room_speed * 3).
-- scheduler(function(){...}).every(room_speed * 1).
-- scheduler(function(){...}).after(room_speed * 3).every(room_speed * 1).
-- scheduler(function(r){...}).http(http_get("https://google.com/"))
+Project is "Open-Source", if you want to create issue, or create pull request with your feature, 
+source code (repository) may be found at GitHub at:
+- https://github.com/kirillzhosul/gamemaker-scheduler
+	
+Author / Maintainer of the project:
+- Kirill Zhosul (@kirillzhosul).
+- https://kirillzhosul.github.io/
