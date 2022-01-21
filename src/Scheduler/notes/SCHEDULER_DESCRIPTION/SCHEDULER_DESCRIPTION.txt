@@ -2,17 +2,17 @@ This folder* contains "Scheduler" project-package.
 
 "Scheduler" allows you to:
 - Delay / repeat:
--- Delay function calls for given `N` amount of frames [scheduler(f).after(n)],
--- Repeat function calls for given `N` amount of frames [scheduler(f).every(n)],
--- Or, all at once (repeat function every `N` frames, after `N` frames) [scheduler(f).after(n).every(n)],
+- - Delay function calls for given `N` amount of frames [scheduler(f).after(n)],
+- - Repeat function calls for given `N` amount of frames [scheduler(f).every(n)],
+- - Or, all at once (repeat function every `N` frames, after `N` frames) [scheduler(f).after(n).every(n)],
 - Await HTTP:
--- Call function when HTTP request is completed (function will give you result). [scheduler(f).http(http_get(...))]
+- - Call function when HTTP request is completed (function will give you result). [scheduler(f).http(http_get(...))]
 
 
 Project is "Open-Source", if you want to create issue, or create pull request with your feature, 
 source code (repository) may be found at GitHub at:
 - https://github.com/kirillzhosul/gamemaker-scheduler
-	
+
 Author / Maintainer of the project:
 - Kirill Zhosul (@kirillzhosul).
 - https://kirillzhosul.github.io/

@@ -28,22 +28,22 @@ read more about specific chain operations, and other stuff.
 
 3. Chain operations.
 - `*.after(N)`
--- Will execute task after given N frames.
+- - Will execute task after given N frames.
 - `*.every(N)`
--- Will execute task every given N frames.
+- - Will execute task every given N frames.
 - `*.http(request_id)`
--- Will execute task after HTTP response is come.
--- also will stop ticking (`every`, `after` will not work).
+- - Will execute task after HTTP response is come.
+- - also will stop ticking (`every`, `after` will not work).
 
 
 4. Callbacks result.
 - For `after` tasks:
--- If callback returns undefined (or not returns any), this will be simply mark task as completed and delete it.
--- If callback returns false, this will retry callback after next frame.
--- If callback returns true, this will restart task, from base `after` delay.
+- - If callback returns undefined (or not returns any), this will be simply mark task as completed and delete it.
+- - If callback returns false, this will retry callback after next frame.
+- - If callback returns true, this will restart task, from base `after` delay.
 - For `every` tasks:
--- If callback returns undefined (or not returns any), this will be simply continue every execution.
--- If callback returns any other, this will stop executing every frame (By marking task as completed).
+- - If callback returns undefined (or not returns any), this will be simply continue every execution.
+- - If callback returns any other, this will stop executing every frame (By marking task as completed).
 - For `http` tasks:
--- Not applicable.
+- - Not applicable.
 
