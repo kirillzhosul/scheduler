@@ -306,62 +306,32 @@ function __scheduler_tick_task(task){
 
 function __scheduler_on_async_http(){
 	// @description Handles `async` HTTP loading event.
-	
-	var http_request_id = async_load[? "id"];
-	
-	var tasks_count = ds_list_size(global.__scheduler_tasks_list);
-	for (var task_index = 0; task_index < tasks_count; task_index ++){
-		var task = ds_list_find_value(global.__scheduler_tasks_list, task_index);
-		if (not variable_struct_exists(task.__container, "http_request_id")) continue;
-		
-		if (task.__container.http_request_id == http_request_id){
-			// If current task is requested this call.
-			
-			__scheduler_task_call(task, async_load);
-			task.__container.skip_handle_tick = true; // Allow to tick.
-			
-			// Delete task.
-			ds_list_delete(global.__scheduler_tasks_list, task_index);
-			return;
-		}
-	}
+	__scheduler_on_async_call("http_request_id");
 }
 
 function __scheduler_on_async_steam(){
 	// @description Handles `async` Steam loading event.
-	
-	var steam_request_id = async_load[? "id"];
-	
-	var tasks_count = ds_list_size(global.__scheduler_tasks_list);
-	for (var task_index = 0; task_index < tasks_count; task_index ++){
-		var task = ds_list_find_value(global.__scheduler_tasks_list, task_index);
-		if (not variable_struct_exists(task.__container, "steam_request_id")) continue;
-		
-		if (task.__container.steam_request_id == steam_request_id){
-			// If current task is requested this call.
-			
-			__scheduler_task_call(task, async_load);
-			task.__container.skip_handle_tick = true; // Allow to tick.
-			
-			// Delete task.
-			ds_list_delete(global.__scheduler_tasks_list, task_index);
-			return;
-		}
-	}
+	__scheduler_on_async_call("steam_request_id");
 }
-
 
 function __scheduler_on_async_saveandload(){
 	// @description Handles `async` Save and Load loading event.
+	__scheduler_on_async_call("buffer_request_id");
+}
+
+function  __scheduler_on_async_call(request_name, request_id=undefined){
+	// @description Call async request for requested task when there is some async event.
+	// @param {string} request_name Name of the request index parameter.
+	// @param {real|undefined} request_id Index of the request, may be ommited.
 	
-	var buffer_request_id = async_load[? "id"];
+	request_id ??= async_load[? "id"];
 	
 	var tasks_count = ds_list_size(global.__scheduler_tasks_list);
 	for (var task_index = 0; task_index < tasks_count; task_index ++){
 		var task = ds_list_find_value(global.__scheduler_tasks_list, task_index);
-		if (not variable_struct_exists(task.__container, "buffer_request_id")) continue;
+		if (not variable_struct_exists(task.__container, request_name)) continue;
 		
-		if (task.__container.buffer_request_id == buffer_request_id){
+		if (variable_struct_get(task.__container, request_name) == request_id){
 			// If current task is requested this call.
 			
 			__scheduler_task_call(task, async_load);
