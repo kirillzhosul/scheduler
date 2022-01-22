@@ -57,16 +57,17 @@ function every(delay, callback, params=undefined){
 }
 
 // Alias for schedule(callback, params).http(request_id);
-function http(request_id, callback, params=undefined){
+function http_async(request_id, callback, params=undefined){
 	// @description Calls callback, after HTTP response is come.
 	return schedule(callback, params).http(request_id);
 }
 
 // Alias for schedule(callback, params).steam(request_id);
-function steam(request_id, callback, params=undefined){
+function steam_async(request_id, callback, params=undefined){
 	// @description Calls callback, after Steam response is come.
 	return schedule(callback, params).steam(request_id);
 }
+
 
 #endregion
 
