@@ -27,23 +27,35 @@ after(room_speed * 2, function (){
 })
 
 
-// Message after HTTP response.
-schedule(function(){
-	show_message_async("Message after HTTP request response!");
-}).http(http_get("https://google.com"));
+// Question.
+dialog_async(show_question_async("Async question!"), function(r){
+	if (ds_map_find_value(r, "status")){
+		show_message("You pressed yes!");
+	}else{
+		show_message("You pressed no!");
+	}
+})
 
+// Question (Non-example).
+dialog_async(show_question_async("Try call Steam/HTTP/Buffer examples?"), function(r){
+	if (ds_map_find_value(r, "status")){
+		// Message after HTTP response.
+		schedule(function(){
+			show_message_async("Message after HTTP request response!");
+		}).http(http_get("https://google.com"));
 
-// Message after Steam response.
-schedule(function(r){
-	show_message_async("Message after Steam request response!\nResult:\n" + json_encode(r));
-}).steam(steam_download_scores("NOT_EXISTING_LEADERBOARD", 0, 1));
+		// Message after Steam response.
+		schedule(function(r){
+			show_message_async("Message after Steam request response!\nResult:\n" + json_encode(r));
+		}).steam(steam_download_scores("NOT_EXISTING_LEADERBOARD", 0, 1));
 
+		// Message after Buffer saved.
+		var buffer = buffer_create(1, buffer_grow, 1); 
+		buffer_write(buffer, buffer_f64, 1124.32);
+		var buffer_save_id = buffer_save_async(buffer, "test", 0, buffer_get_size(buffer));
 
-// Message after Buffer saved.
-var buffer = buffer_create(1, buffer_grow, 1); 
-buffer_write(buffer, buffer_f64, 1124.32);
-var buffer_save_id = buffer_save_async(buffer, "test", 0, buffer_get_size(buff));
-
-schedule(function(buffer, r){
-	show_message_async("Message after buffer save!");
-}, buffer).buffer(buffer_save_id);
+		schedule(function(buffer, r){
+			show_message_async("Message after buffer save!");
+		}, buffer).buffer(buffer_save_id);
+	}
+})

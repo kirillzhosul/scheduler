@@ -42,7 +42,18 @@ function schedule(callback, params=undefined){
 	return scheduled_task; // Return task to make chains.
 }
 
-#region Scheduler (schedule) chain aliases (after, every, http).
+#region Other aliases.
+
+function sprite_add_async(fname, imgnumb, removeback, smooth, xorig, yorig, callback, params=undefined){
+	// @description Will add sprite and call callback when sprite is loaded.
+	return sprite_async(sprite_add(fname, imgnumb, removeback, smooth, xorig, yorig), callback, params);
+}
+
+#endregion
+
+#region Scheduler (schedule) chain aliases.
+
+#region Delay / Time based.
 
 // Alias for schedule(callback, params).after(delay);
 function after(delay, callback, params=undefined){
@@ -55,6 +66,10 @@ function every(delay, callback, params=undefined){
 	// @description Calls callback, every delay amount of frames.
 	return schedule(callback, params).every(delay);
 }
+
+#endregion
+
+#region Async events.
 
 // Alias for schedule(callback, params).http(request_id);
 function http_async(request_id, callback, params=undefined){
@@ -73,6 +88,20 @@ function buffer_async(request_id, callback, params=undefined){
 	// @description Calls callback, after buffer is loaden/saved.
 	return schedule(callback, params).buffer(request_id);
 }
+
+// Alias for schedule(callback, params).sprite(request_id);
+function sprite_async(sprite_add_id, callback, params=undefined){
+	// @description Calls callback, after given sprite is finally loaden.
+	return schedule(callback, params).sprite(sprite_add_id);
+}
+
+// Alias for schedule(callback, params).dialog(dialog_id);
+function dialog_async(dialog_id, callback, params=undefined){
+	// @description Calls callback, after given dialog is triggered.
+	return schedule(callback, params).dialog(dialog_id);
+}
+
+#endregion
 
 #endregion
 
@@ -125,7 +154,11 @@ function __SchedulerTask(callback, params=undefined) constructor{
 	self.steam = __scheduler_task_chain_operation_steam; 
 		// (task)*.buffer(request_id).*;
 	self.buffer = __scheduler_task_chain_operation_buffer; 
-	
+		// (task)*.sprite(request_id).*;
+	self.sprite = __scheduler_task_chain_operation_sprite; 
+		// (task)*.dialog(dialoag_id).*;
+	self.dialog = __scheduler_task_chain_operation_dialog; 
+
 };
 
 // Scheduler task private container structure.
@@ -148,8 +181,12 @@ function __SchedulerTaskContainer(callback, params=undefined) constructor{
 	
 	// Non default parameters.
 	
-	// HTTP.
+	// Async.
 	// - self.http_request_id = undefined;
+	// - self.steam_request_id = undefined;
+	// - self.buffer_request_id = undefined;
+	// - self.sprite_request_id = undefined;
+	// - self.dialog_id = undefined;
 }
 
 #endregion
@@ -321,6 +358,16 @@ function __scheduler_on_async_saveandload(){
 	__scheduler_on_async_call("buffer_request_id");
 }
 
+function __scheduler_on_async_dialog(){
+	// @description Handles `async` dialog trigger event.
+	__scheduler_on_async_call("dialog_id");
+}
+
+function __scheduler_on_async_image_loaded(){
+	// @description Handles `async` image loaded event.
+	__scheduler_on_async_call("sprite_request_id");
+}
+
 #endregion
 
 function __scheduler_on_async_call(request_name, request_id=undefined){
@@ -406,6 +453,34 @@ function __scheduler_task_chain_operation_buffer(buffer_request_id){
 	self.__container.buffer_request_id = buffer_request_id;
 	
 	// Locking by Buffer. (Do not process tick).
+	self.__container.skip_handle_tick = true;
+	
+	return self; // Returning chain.
+}
+
+function __scheduler_task_chain_operation_sprite(sprite_request_id){
+	// @description Will call task when sprite for given request is loaden.
+	// @param {real} sprite_request_id Request index.
+	// @returns {struct[__SchedulerTask]} Chain continuation.
+	
+	// Remember request.
+	self.__container.sprite_request_id = sprite_request_id;
+	
+	// Locking by Sprite. (Do not process tick).
+	self.__container.skip_handle_tick = true;
+	
+	return self; // Returning chain.
+}
+
+function __scheduler_task_chain_operation_dialog(dialog_id){
+	// @description Will call task when dialog is triggered* (See GM docs).
+	// @param {real} dialog_id Dialog index.
+	// @returns {struct[__SchedulerTask]} Chain continuation.
+	
+	// Remember dialog.
+	self.__container.dialog_id = dialog_id;
+	
+	// Locking by Dialog. (Do not process tick).
 	self.__container.skip_handle_tick = true;
 	
 	return self; // Returning chain.
