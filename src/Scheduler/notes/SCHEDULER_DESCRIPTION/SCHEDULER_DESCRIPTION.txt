@@ -12,7 +12,6 @@ This folder* contains "Scheduler" project-package.
 - - Call function when Dialog is completed (function will give you result). [scheduler(f).dialog_async(show_question_async(...))]
 - - Call function when Image is loaden. [scheduler(f).sprite_async(sprite_add(...)) |OR| sprite_add_async(...)]
 
-
 Project is "Open-Source", if you want to create issue, or create pull request with your feature, 
 source code (repository) may be found at GitHub at:
 - https://github.com/kirillzhosul/gamemaker-scheduler

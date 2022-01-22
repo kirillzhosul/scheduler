@@ -2,6 +2,8 @@ To create new scheduler task, simply write `schedule(f, [params])`, that will cr
 to add modifications, like run after more delay, chain like `schedule(f, [params]).after(N)` where N - amount of frames to delay,
 read more about specific chain operations, and other stuff.
 
+For async tasks, you may want read offficial GM event documentation:
+https://docs2.yoyogames.com/source/_build/2_interface/1_editors/events/async_events.html
 
 0. Examples:
 - Scheduler:

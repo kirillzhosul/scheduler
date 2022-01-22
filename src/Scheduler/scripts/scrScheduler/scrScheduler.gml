@@ -39,6 +39,9 @@
 //- EXT:
 //- - sprite_add_async({sprite_add params}, function(r){...})
 
+// For async tasks, you may want read offficial GM event documentation:
+// https://docs2.yoyogames.com/source/_build/2_interface/1_editors/events/async_events.html
+
 #region Public (Interface for you).
 
 // If true, will try to init schedule before schedule.
