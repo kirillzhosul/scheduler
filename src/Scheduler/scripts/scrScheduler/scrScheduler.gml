@@ -5,8 +5,7 @@
 // @copyright (c) 2022 Kirill Zhosul.
 // @license MIT License. (@see "SCHEDULER_LICENSE")
 // @see {@link https://github.com/kirillzhosul/gamemaker-scheduler}
-// @version 1.0
-
+// @version 2.0
 
 // "Scheduler",
 
@@ -15,14 +14,30 @@
 // - - Delay function calls for given `N` amount of frames [scheduler(f).after(n)],
 // - - Repeat function calls for given `N` amount of frames [scheduler(f).every(n)],
 // - - Or, all at once (repeat function every `N` frames, after `N` frames) [scheduler(f).after(n).every(n)],
-// - Await HTTP:
-// -- Call function when HTTP request is completed (function will give you result). [scheduler(f).http(http_get(...))]
+// - Await:
+// - - Call function when HTTP request is completed (function will give you result). [scheduler(f).http_async(http_get(...))]
+// - - Call function when Steam request is completed (function will give you result). [scheduler(f).steam_async(steam_*(...))]
+// - - Call function when Buffer is loaden/saved. [scheduler(f).buffer_async(buffer_load_async(...))]
+// - - Call function when Dialog is completed (function will give you result). [scheduler(f).dialog_async(show_question_async(...))]
+// - - Call function when Image is loaden. [scheduler(f).sprite_async(sprite_add(...)) |OR| sprite_add_async(...)]
 
-// Examples:
-// - scheduler(instance_destroy).after(room_speed * 3).
-// - scheduler(function(){...}).every(room_speed * 1).
-// - scheduler(function(){...}).after(room_speed * 3).every(room_speed * 1).
-// - scheduler(function(r){...}).http(http_get("https://google.com/"))
+//Examples:
+//- Scheduler:
+//- - scheduler(instance_destroy).after(room_speed * 3).
+//- - scheduler(function(){...}).every(room_speed * 1).
+//- - scheduler(function(){...}).after(room_speed * 3).every(room_speed * 1).
+//- - scheduler(function(r){...}).http_async(http_get("https://google.com/"))
+//- - scheduler(function(r){...}).steam_async(steam_download_scores(...))
+//- - scheduler(function(r){...}).dialog_async(show_question_async("Are you fine?"))
+//- - scheduler(function(r){...}).sprite_async(sprite_add(...))
+//- - scheduler(function(r){...}).buffer_async(buffer_load_async(...))
+//- Aliases:
+//- every(room_speed * 1, function(){...})
+//- after(room_speed * 3, function(){...})
+//- http_async(http_get("https://google.com/"), function(r){...})
+//- steam_async(steam_download_scores(...), function(r){...})
+//- EXT:
+//- - sprite_add_async({sprite_add params}, function(r){...})
 
 #region Public (Interface for you).
 

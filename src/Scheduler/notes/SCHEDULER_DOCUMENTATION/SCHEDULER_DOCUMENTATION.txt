@@ -64,4 +64,3 @@ read more about specific chain operations, and other stuff.
 - - If callback returns any other, this will stop executing every frame (By marking task as completed).
 - For all async tasks (http_async, steam_async, buffer_async, and other...):
 - - Not applicable.
-
