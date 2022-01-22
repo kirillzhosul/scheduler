@@ -4,10 +4,22 @@ read more about specific chain operations, and other stuff.
 
 
 0. Examples:
-- scheduler(instance_destroy).after(room_speed * 3).
-- scheduler(function(){...}).every(room_speed * 1).
-- scheduler(function(){...}).after(room_speed * 3).every(room_speed * 1).
-- scheduler(function(r){...}).http(http_get("https://google.com/"))
+- Scheduler:
+- - scheduler(instance_destroy).after(room_speed * 3).
+- - scheduler(function(){...}).every(room_speed * 1).
+- - scheduler(function(){...}).after(room_speed * 3).every(room_speed * 1).
+- - scheduler(function(r){...}).http_async(http_get("https://google.com/"))
+- - scheduler(function(r){...}).steam_async(steam_download_scores(...))
+- - scheduler(function(r){...}).dialog_async(show_question_async("Are you fine?"))
+- - scheduler(function(r){...}).sprite_async(sprite_add(...))
+- - scheduler(function(r){...}).buffer_async(buffer_load_async(...))
+- Aliases:
+- every(room_speed * 1, function(){...})
+- after(room_speed * 3, function(){...})
+- http_async(http_get("https://google.com/"), function(r){...})
+- steam_async(steam_download_scores(...), function(r){...})
+- EXT:
+- - sprite_add_async({sprite_add params}, function(r){...})
 
 
 1. Aliases.
@@ -18,7 +30,13 @@ read more about specific chain operations, and other stuff.
 1.1 List of aliases.
 - `after(N, f, [params])`;
 - `every(N, f, [params])`;
-- `http(request_id, f, [params])`;
+- `http_async(request_id, f, [params])`;
+- `steam_async(request_id, f, [params])`;
+- `buffer_async(request_id, f, [params])`;
+- `dialog_async(dialog_id, f, [params])`;
+- `sprite_async(sprite_add_id, f, [params])`;
+- EXT:
+- `sprite_add_async({sprite_add params}, f, [params])`
 
 
 2. Chain entry point (`schedule(f, [params])`).
@@ -31,10 +49,10 @@ read more about specific chain operations, and other stuff.
 - - Will execute task after given N frames.
 - `*.every(N)`
 - - Will execute task every given N frames.
-- `*.http(request_id)`
+- `*.http_async(request_id)`
 - - Will execute task after HTTP response is come.
 - - also will stop ticking (`every`, `after` will not work).
-
+- All other async operations will behave like `http_async` which is described above.
 
 4. Callbacks result.
 - For `after` tasks:
@@ -44,6 +62,6 @@ read more about specific chain operations, and other stuff.
 - For `every` tasks:
 - - If callback returns undefined (or not returns any), this will be simply continue every execution.
 - - If callback returns any other, this will stop executing every frame (By marking task as completed).
-- For `http` tasks:
+- For all async tasks (http_async, steam_async, buffer_async, and other...):
 - - Not applicable.
 
