@@ -1,5 +1,5 @@
 Current version:
-- v1.0 (GMS2.3)
+- v2.0 (GMS2.3)
 
 You may try search new version here:
 - https://github.com/kirillzhosul/gamemaker-logging/releases
