@@ -62,6 +62,12 @@ function http(request_id, callback, params=undefined){
 	return schedule(callback, params).http(request_id);
 }
 
+// Alias for schedule(callback, params).steam(request_id);
+function steam(request_id, callback, params=undefined){
+	// @description Calls callback, after Steam response is come.
+	return schedule(callback, params).steam(request_id);
+}
+
 #endregion
 
 #endregion
@@ -105,6 +111,9 @@ function __SchedulerTask(callback, params=undefined) constructor{
 	self.every = __scheduler_task_chain_operation_every; 
 		// (task)*.http(request).*;
 	self.http = __scheduler_task_chain_operation_http; 
+		// (task)*.steam(request).*;
+	self.steam = __scheduler_task_chain_operation_steam; 
+	
 };
 
 // Scheduler task private container structure.
@@ -281,7 +290,7 @@ function __scheduler_tick_task(task){
 
 #endregion
 
-#region Async (HTTP).
+#region Async.
 
 function __scheduler_on_async_http(){
 	// @description Handles `async` HTTP loading event.
@@ -294,6 +303,29 @@ function __scheduler_on_async_http(){
 		if (not variable_struct_exists(task.__container, "http_request_id")) continue;
 		
 		if (task.__container.http_request_id == http_request_id){
+			// If current task is requested this call.
+			
+			__scheduler_task_call(task, async_load);
+			task.__container.skip_handle_tick = true; // Allow to tick.
+			
+			// Delete task.
+			ds_list_delete(global.__scheduler_tasks_list, task_index);
+			return;
+		}
+	}
+}
+
+function __scheduler_on_async_steam(){
+	// @description Handles `async` Steam loading event.
+	
+	var steam_request_id = async_load[? "id"];
+	
+	var tasks_count = ds_list_size(global.__scheduler_tasks_list);
+	for (var task_index = 0; task_index < tasks_count; task_index ++){
+		var task = ds_list_find_value(global.__scheduler_tasks_list, task_index);
+		if (not variable_struct_exists(task.__container, "steam_request_id")) continue;
+		
+		if (task.__container.steam_request_id == steam_request_id){
 			// If current task is requested this call.
 			
 			__scheduler_task_call(task, async_load);
@@ -336,6 +368,20 @@ function __scheduler_task_chain_operation_http(http_request_id){
 	self.__container.http_request_id = http_request_id;
 	
 	// Locking by HTTP. (Do not process tick).
+	self.__container.skip_handle_tick = true;
+	
+	return self; // Returning chain.
+}
+
+function __scheduler_task_chain_operation_steam(steam_request_id){
+	// @description Will call task when Steam response for given request is ready.
+	// @param {real} steam_request_id Request index.
+	// @returns {struct[__SchedulerTask]} Chain continuation.
+	
+	// Remember request.
+	self.__container.steam_request_id = steam_request_id;
+	
+	// Locking by Steam. (Do not process tick).
 	self.__container.skip_handle_tick = true;
 	
 	return self; // Returning chain.

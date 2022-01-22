@@ -22,5 +22,10 @@ after(room_speed * 2, function (){
 
 // Message after HTTP response.
 http(http_get("https://google.com"), function(){
-	show_message_async("Message after http request response!");
+	show_message_async("Message after HTTP request response!");
 });
+
+// Message after Steam response.
+schedule(function(r){
+	show_message_async("Message after Steam request response!\nResult:\n" + json_encode(r));
+}).steam(steam_download_scores("NOT_EXISTING_LEADERBOARD", 0, 1));
