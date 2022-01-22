@@ -90,7 +90,7 @@ function __scheduler_task_call(task, extra_params=undefined){
 
 // Scheduler task structure.
 // will be returned from `schedule()` and all chain operations (as `self`).
-function __SchedulerTask(callback, params) constructor{
+function __SchedulerTask(callback, params=undefined) constructor{
 	// @param {function} callback Function that will be called when task executed.
 	// @param {any} params Will be passed with callback.
 	
@@ -109,7 +109,7 @@ function __SchedulerTask(callback, params) constructor{
 
 // Scheduler task private container structure.
 // encapsulates data from `__SchedulerTask`.
-function __SchedulerTaskContainer(callback, params) constructor{
+function __SchedulerTaskContainer(callback, params=undefined) constructor{
 	// Callback information (`callback_function(callback_params)`).
 	self.callback_function = callback;
 	self.callback_params = params;
