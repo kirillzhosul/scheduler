@@ -68,6 +68,11 @@ function steam_async(request_id, callback, params=undefined){
 	return schedule(callback, params).steam(request_id);
 }
 
+// Alias for schedule(callback, params).buffer(request_id);
+function buffer_async(request_id, callback, params=undefined){
+	// @description Calls callback, after buffer is loaden/saved.
+	return schedule(callback, params).buffer(request_id);
+}
 
 #endregion
 
@@ -106,14 +111,20 @@ function __SchedulerTask(callback, params=undefined) constructor{
 	self.__container = new __SchedulerTaskContainer(callback, params);
 	
 	// Chain operations.
+	
+	// Delay / Time based.
 		// (task)*.after(delay).*;
 	self.after = __scheduler_task_chain_operation_after;
 		// (task)*.every(delay).*;
 	self.every = __scheduler_task_chain_operation_every; 
-		// (task)*.http(request).*;
+	
+	// Async events.
+		// (task)*.http(request_id).*;
 	self.http = __scheduler_task_chain_operation_http; 
-		// (task)*.steam(request).*;
+		// (task)*.steam(request_id).*;
 	self.steam = __scheduler_task_chain_operation_steam; 
+		// (task)*.buffer(request_id).*;
+	self.buffer = __scheduler_task_chain_operation_buffer; 
 	
 };
 
@@ -339,6 +350,30 @@ function __scheduler_on_async_steam(){
 	}
 }
 
+
+function __scheduler_on_async_saveandload(){
+	// @description Handles `async` Save and Load loading event.
+	
+	var buffer_request_id = async_load[? "id"];
+	
+	var tasks_count = ds_list_size(global.__scheduler_tasks_list);
+	for (var task_index = 0; task_index < tasks_count; task_index ++){
+		var task = ds_list_find_value(global.__scheduler_tasks_list, task_index);
+		if (not variable_struct_exists(task.__container, "buffer_request_id")) continue;
+		
+		if (task.__container.buffer_request_id == buffer_request_id){
+			// If current task is requested this call.
+			
+			__scheduler_task_call(task, async_load);
+			task.__container.skip_handle_tick = true; // Allow to tick.
+			
+			// Delete task.
+			ds_list_delete(global.__scheduler_tasks_list, task_index);
+			return;
+		}
+	}
+}
+
 #endregion
 
 #region Chain operations.
@@ -383,6 +418,20 @@ function __scheduler_task_chain_operation_steam(steam_request_id){
 	self.__container.steam_request_id = steam_request_id;
 	
 	// Locking by Steam. (Do not process tick).
+	self.__container.skip_handle_tick = true;
+	
+	return self; // Returning chain.
+}
+
+function __scheduler_task_chain_operation_buffer(buffer_request_id){
+	// @description Will call task when buffer for given request is loaden or saved.
+	// @param {real} buffer_request_id Request index.
+	// @returns {struct[__SchedulerTask]} Chain continuation.
+	
+	// Remember request.
+	self.__container.buffer_request_id = buffer_request_id;
+	
+	// Locking by Buffer. (Do not process tick).
 	self.__container.skip_handle_tick = true;
 	
 	return self; // Returning chain.
