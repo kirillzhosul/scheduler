@@ -315,6 +315,11 @@ function __scheduler_task_chain_operation_after(delay){
 	// @param {real} delay Delay after, in frames.
 	// @returns {struct[__SchedulerTask]} Chain continuation.
 	
+	if (delay <= 0){
+		show_error("[:ERROR:][Scheduler] Delay for `after` can not be less than 0!", true);
+		return self; // Returning chain.
+	}
+	
 	// Updating time.
 	self.__container.time_after = delay;
 	self.__container.time_left_after = self.__container.time_after;
@@ -340,6 +345,11 @@ function __scheduler_task_chain_operation_every(delay){
 	// @description Makes task to run every given amount of frames (by resetting previous value).
 	// @param {real} delay Delay every, in frames.
 	// @returns {struct[__SchedulerTask]} Chain continuation.
+	
+	if (delay <= 0){
+		show_error("[:ERROR:][Scheduler] Delay for `every` can not be less than 0!", true);
+		return self; // Returning chain.
+	}
 	
 	// Updating time.
 	self.__container.time_every = delay;
