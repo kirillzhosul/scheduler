@@ -304,6 +304,8 @@ function __scheduler_tick_task(task){
 
 #region Async.
 
+#region Events.
+
 function __scheduler_on_async_http(){
 	// @description Handles `async` HTTP loading event.
 	__scheduler_on_async_call("http_request_id");
@@ -319,7 +321,9 @@ function __scheduler_on_async_saveandload(){
 	__scheduler_on_async_call("buffer_request_id");
 }
 
-function  __scheduler_on_async_call(request_name, request_id=undefined){
+#endregion
+
+function __scheduler_on_async_call(request_name, request_id=undefined){
 	// @description Call async request for requested task when there is some async event.
 	// @param {string} request_name Name of the request index parameter.
 	// @param {real|undefined} request_id Index of the request, may be ommited.
