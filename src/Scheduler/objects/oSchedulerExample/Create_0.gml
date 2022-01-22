@@ -36,8 +36,8 @@ schedule(function(r){
 // Message after Buffer saved.
 var buffer = buffer_create(1, buffer_grow, 1); 
 buffer_write(buffer, buffer_f64, 1124.32);
-var buffer_save_id = buffer_save_async(buff, "test", 0, buffer_get_size(buff));
+var buffer_save_id = buffer_save_async(buffer, "test", 0, buffer_get_size(buff));
 
-schedule(function(buff, r){
+schedule(function(buffer, r){
 	show_message_async("Message after buffer save!");
-}, buff).buffer(buffer_save_id);
+}, buffer).buffer(buffer_save_id);
