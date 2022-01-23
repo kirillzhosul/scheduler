@@ -1,46 +1,47 @@
 /// @description Delay, repeat, await functions.
-// @file Scheduler system.
+/// @file Scheduler system.
 
-// @author Kirill Zhosul (@kirillzhosul).
-// @copyright (c) 2022 Kirill Zhosul.
-// @license MIT License. (@see "SCHEDULER_LICENSE")
-// @see {@link https://github.com/kirillzhosul/gamemaker-scheduler}
-// @version 2.0
+/// @author Kirill Zhosul (@kirillzhosul).
+/// @copyright (c) 2022 Kirill Zhosul.
+/// @license MIT License. (@see "SCHEDULER_LICENSE")
+/// @see {@link https://github.com/kirillzhosul/gamemaker-scheduler}
+/// @version 2.0
 
-// "Scheduler",
+/// "Scheduler",
 
-// Allows you to:
-// - Delay / repeat:
-// - - Delay function calls for given `N` amount of frames [scheduler(f).after(n)],
-// - - Repeat function calls for given `N` amount of frames [scheduler(f).every(n)],
-// - - Or, all at once (repeat function every `N` frames, after `N` frames) [scheduler(f).after(n).every(n)],
-// - Await:
-// - - Call function when HTTP request is completed (function will give you result). [scheduler(f).http_async(http_get(...))]
-// - - Call function when Steam request is completed (function will give you result). [scheduler(f).steam_async(steam_*(...))]
-// - - Call function when Buffer is loaden/saved. [scheduler(f).buffer_async(buffer_load_async(...))]
-// - - Call function when Dialog is completed (function will give you result). [scheduler(f).dialog_async(show_question_async(...))]
-// - - Call function when Image is loaden. [scheduler(f).sprite_async(sprite_add(...)) |OR| sprite_add_async(...)]
+/// Allows you to:
+/// - Delay / repeat:
+/// - - Delay function calls for given `N` amount of frames [scheduler(f).after(n)],
+/// - - Repeat function calls for given `N` amount of frames [scheduler(f).every(n)],
+/// - - Or, all at once (repeat function every `N` frames, after `N` frames) [scheduler(f).after(n).every(n)],
+/// - Await:
+/// - - Call function when HTTP request is completed (function will give you result). [scheduler(f).http_async(http_get(...))]
+/// - - Call function when Steam request is completed (function will give you result). [scheduler(f).steam_async(steam_*(...))]
+/// - - Call function when Buffer is loaden/saved. [scheduler(f).buffer_async(buffer_load_async(...))]
+/// - - Call function when Dialog is completed (function will give you result). [scheduler(f).dialog_async(show_question_async(...))]
+/// - - Call function when Image is loaden. [scheduler(f).sprite_async(sprite_add(...)) |OR| sprite_add_async(...)]
 
-//Examples:
-//- Scheduler:
-//- - scheduler(instance_destroy).after(room_speed * 3).
-//- - scheduler(function(){...}).every(room_speed * 1).
-//- - scheduler(function(){...}).after(room_speed * 3).every(room_speed * 1).
-//- - scheduler(function(r){...}).http_async(http_get("https://google.com/"))
-//- - scheduler(function(r){...}).steam_async(steam_download_scores(...))
-//- - scheduler(function(r){...}).dialog_async(show_question_async("Are you fine?"))
-//- - scheduler(function(r){...}).sprite_async(sprite_add(...))
-//- - scheduler(function(r){...}).buffer_async(buffer_load_async(...))
-//- Aliases:
-//- every(room_speed * 1, function(){...})
-//- after(room_speed * 3, function(){...})
-//- http_async(http_get("https://google.com/"), function(r){...})
-//- steam_async(steam_download_scores(...), function(r){...})
-//- EXT:
-//- - sprite_add_async({sprite_add params}, function(r){...})
+///Examples:
+///- Scheduler:
+///- - scheduler(instance_destroy).after(room_speed * 3).
+///- - scheduler(function(){...}).every(room_speed * 1).
+///- - scheduler(function(){...}).after(room_speed * 3).every(room_speed * 1).
+///- - scheduler(function(r){...}).http_async(http_get("https://google.com/"))
+///- - scheduler(function(r){...}).steam_async(steam_download_scores(...))
+///- - scheduler(function(r){...}).dialog_async(show_question_async("Are you fine?"))
+///- - scheduler(function(r){...}).sprite_async(sprite_add(...))
+///- - scheduler(function(r){...}).buffer_async(buffer_load_async(...))
+///- Aliases:
+///- every(room_speed * 1, function(){...})
+///- after(room_speed * 3, function(){...})
+///- http_async(http_get("https://google.com/"), function(r){...})
+///- steam_async(steam_download_scores(...), function(r){...})
+///- EXT:
+///- - sprite_add_async({sprite_add params}, function(r){...})
 
-// For async tasks, you may want read offficial GM event documentation:
-// https://docs2.yoyogames.com/source/_build/2_interface/1_editors/events/async_events.html
+/// For async tasks, you may want read offficial GM event documentation:
+/// https://docs2.yoyogames.com/source/_build/2_interface/1_editors/events/async_events.html
+
 
 #region Public (Interface for you).
 
@@ -50,8 +51,9 @@
 #macro SCHEDULER_SAFE_SCHEDULE_INIT true
 
 function schedule(callback, params=undefined){
-	// @description Schedules given callback as scheduled task and returns it as schedule task structure (allowing you to chain*).
-	// @param {function} callback Function that will be called when schedule triggered.
+	/// @description Schedules given callback as scheduled task and returns it as schedule task structure (allowing you to chain*).
+	/// @param {function} callback Function that will be called when schedule triggered.
+	/// @param {any} params If != undefined, will be passed with callback.
 	if (SCHEDULER_SAFE_SCHEDULE_INIT) __scheduler_init();
 	
 	var scheduled_task = new __SchedulerTask(callback, params); // Create new task.
@@ -63,7 +65,15 @@ function schedule(callback, params=undefined){
 #region Other aliases.
 
 function sprite_add_async(fname, imgnumb, removeback, smooth, xorig, yorig, callback, params=undefined){
-	// @description Will add sprite and call callback when sprite is loaded.
+	/// @description Will add sprite and call callback when sprite is loaded.
+	/// @param {string} fname Filename to load.
+	/// @param {real} imgnumb Number of images to load.
+	/// @param {bool} removeback If true, will remove background.
+	/// @param {bool} smooth If true, will smooth edges if transparent.
+	/// @param {real} xorig X Origin.
+	/// @param {real} yorig Y Origin.
+	/// @param {function} callback Function that will be called when schedule triggered.
+	/// @param {any} params If != undefined, will be passed with callback.
 	return sprite_async(sprite_add(fname, imgnumb, removeback, smooth, xorig, yorig), callback, params);
 }
 
@@ -75,13 +85,17 @@ function sprite_add_async(fname, imgnumb, removeback, smooth, xorig, yorig, call
 
 // Alias for schedule(callback, params).after(delay);
 function after(delay, callback, params=undefined){
-	// @description Calls callback, after delay amount of frames.
+	/// @description Calls callback, after delay amount of frames.
+	/// @param {function} callback Function that will be called when schedule triggered.
+	/// @param {any} params If != undefined, will be passed with callback.
 	return schedule(callback, params).after(delay);
 }
 
 // Alias for schedule(callback, params).every(delay);
 function every(delay, callback, params=undefined){
-	// @description Calls callback, every delay amount of frames.
+	/// @description Calls callback, every delay amount of frames.
+	/// @param {function} callback Function that will be called when schedule triggered.
+	/// @param {any} params If != undefined, will be passed with callback.
 	return schedule(callback, params).every(delay);
 }
 
@@ -91,31 +105,46 @@ function every(delay, callback, params=undefined){
 
 // Alias for schedule(callback, params).http(request_id);
 function http_async(request_id, callback, params=undefined){
-	// @description Calls callback, after HTTP response is come.
+	/// @description Calls callback, after HTTP response is come.
+	/// @param {real} request_id Index of the HTTP request.
+	/// @param {function} callback Function that will be called when schedule triggered.
+	/// @param {any} params If != undefined, will be passed with callback.
 	return schedule(callback, params).http(request_id);
 }
 
 // Alias for schedule(callback, params).steam(request_id);
 function steam_async(request_id, callback, params=undefined){
-	// @description Calls callback, after Steam response is come.
+	/// @description Calls callback, after Steam response is come.
+	/// @param {real} request_id Index of the Steam request.
+	/// @param {function} callback Function that will be called when schedule triggered.
+	/// @param {any} params If != undefined, will be passed with callback.
 	return schedule(callback, params).steam(request_id);
 }
 
 // Alias for schedule(callback, params).buffer(request_id);
 function buffer_async(request_id, callback, params=undefined){
-	// @description Calls callback, after buffer is loaden/saved.
+	/// @description Calls callback, after buffer is loaden/saved.
+	/// @param {real} request_id Index of the Buffer request.
+	/// @param {function} callback Function that will be called when schedule triggered.
+	/// @param {any} params If != undefined, will be passed with callback.
 	return schedule(callback, params).buffer(request_id);
 }
 
 // Alias for schedule(callback, params).sprite(request_id);
 function sprite_async(sprite_add_id, callback, params=undefined){
-	// @description Calls callback, after given sprite is finally loaden.
+	/// @description Calls callback, after given sprite is finally loaden.
+	/// @param {real} sprite_add_id Index of the sprite add request.
+	/// @param {function} callback Function that will be called when schedule triggered.
+	/// @param {any} params If != undefined, will be passed with callback.
 	return schedule(callback, params).sprite(sprite_add_id);
 }
 
 // Alias for schedule(callback, params).dialog(dialog_id);
 function dialog_async(dialog_id, callback, params=undefined){
-	// @description Calls callback, after given dialog is triggered.
+	/// @description Calls callback, after given dialog is triggered.
+	/// @param {real} dialog Index of the async dialog request.
+	/// @param {function} callback Function that will be called when schedule triggered.
+	/// @param {any} params If != undefined, will be passed with callback.
 	return schedule(callback, params).dialog(dialog_id);
 }
 
@@ -130,9 +159,9 @@ function dialog_async(dialog_id, callback, params=undefined){
 #region Callbacks.
 
 function __scheduler_task_call(task, extra_params=undefined){
-	// @description Calls given task by calling it callback.
-	// @param {struct[__SchedulerTask]} task Task to call.
-	// @returns {any} Callback result.
+	/// @description Calls given task by calling it callback.
+	/// @param {struct[__SchedulerTask]} task Task to call.
+	/// @returns {any} Callback result.
 	var callback_function = task.__container.callback_function;
 	var callback_params = task.__container.callback_params;
 
@@ -150,8 +179,8 @@ function __scheduler_task_call(task, extra_params=undefined){
 // Scheduler task structure.
 // will be returned from `schedule()` and all chain operations (as `self`).
 function __SchedulerTask(callback, params=undefined) constructor{
-	// @param {function} callback Function that will be called when task executed.
-	// @param {any} params Will be passed with callback.
+	/// @param {function} callback Function that will be called when task executed.
+	/// @param {any} params Will be passed with callback.
 	
 	// Holds all private releated information.
 	// Should not be modified except scheduler core.
@@ -182,6 +211,9 @@ function __SchedulerTask(callback, params=undefined) constructor{
 // Scheduler task private container structure.
 // encapsulates data from `__SchedulerTask`.
 function __SchedulerTaskContainer(callback, params=undefined) constructor{
+	/// @param {function} callback Function that will be called when task executed.
+	/// @param {any} params Will be passed with callback.
+	
 	// Callback information (`callback_function(callback_params)`).
 	self.callback_function = callback;
 	self.callback_params = params;
@@ -218,7 +250,7 @@ function __SchedulerTaskContainer(callback, params=undefined) constructor{
 #macro __SCHEDULER_CONTROLLER_DEPTH 0
 
 function __scheduler_init(){
-	// @description Initialises scheduler if it is not initialised.
+	/// @description Initialises scheduler if it is not initialised.
 	if (not instance_exists(__SCHEDULER_CONTROLLER_OBJECT)){
 		__scheduler_create_controller(); // Creates object.
 		__scheduler_tick_setup()         // Tick alarm.
@@ -230,7 +262,7 @@ function __scheduler_init(){
 }
 
 function __scheduler_create_controller(){
-	// @description Creates new controller object.
+	/// @description Creates new controller object.
 	if (instance_exists(__SCHEDULER_CONTROLLER_OBJECT)) return;
 	
 	if (layer_exists(__SCHEDULER_CONTROLLER_LAYER)){
@@ -247,7 +279,7 @@ function __scheduler_create_controller(){
 #region Free.
 
 function __scheduler_free(){
-	// @description Free scheduler memory.
+	/// @description Free scheduler memory.
 	
 	if (instance_exists(__SCHEDULER_CONTROLLER_OBJECT)){
 		instance_destroy(__SCHEDULER_CONTROLLER_OBJECT);
@@ -267,12 +299,12 @@ function __scheduler_free(){
 #macro __SCHEDULER_TICK_ALARM_INDEX 0
 
 function __scheduler_tick_setup(){
-	// @description Sets alarm for tick.
+	/// @description Sets alarm for tick.
 	__SCHEDULER_CONTROLLER_OBJECT.alarm_set(__SCHEDULER_TICK_ALARM_INDEX, __SCHEDULER_TICK_ALARM_FRAMES);
 }
 
 function __scheduler_tick_all(){
-	// @description Handles `tick`, updates all scheduled tasks.
+	/// @description Handles `tick`, updates all scheduled tasks.
 	
 	var tasks_count = ds_list_size(global.__scheduler_tasks_list);
 	for (var task_index = 0; task_index < tasks_count; task_index++){
@@ -296,9 +328,9 @@ function __scheduler_tick_all(){
 }
 
 function __scheduler_tick_task(task){
-	// @description Ticks specific task.
-	// @param {struct[__SchedulerTask]} task Task to tick.
-	// @returns {bool} Task is completed? (Should be deleted with `__scheduler_tick_all()` if true.
+	/// @description Ticks specific task.
+	/// @param {struct[__SchedulerTask]} task Task to tick.
+	/// @returns {bool} Task is completed? (Should be deleted with `__scheduler_tick_all()` if true.
 	
 	if (task.__container.skip_handle_tick) return false; // Not handle if task should not process tick.
 		
@@ -362,36 +394,36 @@ function __scheduler_tick_task(task){
 #region Events.
 
 function __scheduler_on_async_http(){
-	// @description Handles `async` HTTP loading event.
+	/// @description Handles `async` HTTP loading event.
 	__scheduler_on_async_call("http_request_id");
 }
 
 function __scheduler_on_async_steam(){
-	// @description Handles `async` Steam loading event.
+	/// @description Handles `async` Steam loading event.
 	__scheduler_on_async_call("steam_request_id");
 }
 
 function __scheduler_on_async_saveandload(){
-	// @description Handles `async` Save and Load loading event.
+	/// @description Handles `async` Save and Load loading event.
 	__scheduler_on_async_call("buffer_request_id");
 }
 
 function __scheduler_on_async_dialog(){
-	// @description Handles `async` dialog trigger event.
+	/// @description Handles `async` dialog trigger event.
 	__scheduler_on_async_call("dialog_id");
 }
 
 function __scheduler_on_async_image_loaded(){
-	// @description Handles `async` image loaded event.
+	/// @description Handles `async` image loaded event.
 	__scheduler_on_async_call("sprite_request_id");
 }
 
 #endregion
 
 function __scheduler_on_async_call(request_name, request_id=undefined){
-	// @description Call async request for requested task when there is some async event.
-	// @param {string} request_name Name of the request index parameter.
-	// @param {real|undefined} request_id Index of the request, may be ommited.
+	/// @description Call async request for requested task when there is some async event.
+	/// @param {string} request_name Name of the request index parameter.
+	/// @param {real|undefined} request_id Index of the request, may be ommited.
 	
 	request_id ??= async_load[? "id"];
 	
@@ -418,9 +450,9 @@ function __scheduler_on_async_call(request_name, request_id=undefined){
 #region Chain operations.
 
 function __scheduler_task_chain_operation_after(delay){
-	// @description Delays task for given amount of frames (by resetting previous value).
-	// @param {real} delay Delay after, in frames.
-	// @returns {struct[__SchedulerTask]} Chain continuation.
+	/// @description Delays task for given amount of frames (by resetting previous value).
+	/// @param {real} delay Delay after, in frames.
+	/// @returns {struct[__SchedulerTask]} Chain continuation.
 	
 	if (delay <= 0){
 		show_error("[:ERROR:][Scheduler] Delay for `after` can not be less than 0!", true);
@@ -435,9 +467,9 @@ function __scheduler_task_chain_operation_after(delay){
 }
 
 function __scheduler_task_chain_operation_http(http_request_id){
-	// @description Will call task when HTTP response for given request is ready.
-	// @param {real} http_request_id Request index.
-	// @returns {struct[__SchedulerTask]} Chain continuation.
+	/// @description Will call task when HTTP response for given request is ready.
+	/// @param {real} http_request_id Request index.
+	/// @returns {struct[__SchedulerTask]} Chain continuation.
 	
 	// Remember request.
 	self.__container.http_request_id = http_request_id;
@@ -449,9 +481,9 @@ function __scheduler_task_chain_operation_http(http_request_id){
 }
 
 function __scheduler_task_chain_operation_steam(steam_request_id){
-	// @description Will call task when Steam response for given request is ready.
-	// @param {real} steam_request_id Request index.
-	// @returns {struct[__SchedulerTask]} Chain continuation.
+	/// @description Will call task when Steam response for given request is ready.
+	/// @param {real} steam_request_id Request index.
+	/// @returns {struct[__SchedulerTask]} Chain continuation.
 	
 	// Remember request.
 	self.__container.steam_request_id = steam_request_id;
@@ -463,9 +495,9 @@ function __scheduler_task_chain_operation_steam(steam_request_id){
 }
 
 function __scheduler_task_chain_operation_buffer(buffer_request_id){
-	// @description Will call task when buffer for given request is loaden or saved.
-	// @param {real} buffer_request_id Request index.
-	// @returns {struct[__SchedulerTask]} Chain continuation.
+	/// @description Will call task when buffer for given request is loaden or saved.
+	/// @param {real} buffer_request_id Request index.
+	/// @returns {struct[__SchedulerTask]} Chain continuation.
 	
 	// Remember request.
 	self.__container.buffer_request_id = buffer_request_id;
@@ -477,9 +509,9 @@ function __scheduler_task_chain_operation_buffer(buffer_request_id){
 }
 
 function __scheduler_task_chain_operation_sprite(sprite_request_id){
-	// @description Will call task when sprite for given request is loaden.
-	// @param {real} sprite_request_id Request index.
-	// @returns {struct[__SchedulerTask]} Chain continuation.
+	/// @description Will call task when sprite for given request is loaden.
+	/// @param {real} sprite_request_id Request index.
+	/// @returns {struct[__SchedulerTask]} Chain continuation.
 	
 	// Remember request.
 	self.__container.sprite_request_id = sprite_request_id;
@@ -491,9 +523,9 @@ function __scheduler_task_chain_operation_sprite(sprite_request_id){
 }
 
 function __scheduler_task_chain_operation_dialog(dialog_id){
-	// @description Will call task when dialog is triggered* (See GM docs).
-	// @param {real} dialog_id Dialog index.
-	// @returns {struct[__SchedulerTask]} Chain continuation.
+	/// @description Will call task when dialog is triggered* (See GM docs).
+	/// @param {real} dialog_id Dialog index.
+	/// @returns {struct[__SchedulerTask]} Chain continuation.
 	
 	// Remember dialog.
 	self.__container.dialog_id = dialog_id;
@@ -505,9 +537,9 @@ function __scheduler_task_chain_operation_dialog(dialog_id){
 }
 
 function __scheduler_task_chain_operation_every(delay){
-	// @description Makes task to run every given amount of frames (by resetting previous value).
-	// @param {real} delay Delay every, in frames.
-	// @returns {struct[__SchedulerTask]} Chain continuation.
+	/// @description Makes task to run every given amount of frames (by resetting previous value).
+	/// @param {real} delay Delay every, in frames.
+	/// @returns {struct[__SchedulerTask]} Chain continuation.
 	
 	if (delay <= 0){
 		show_error("[:ERROR:][Scheduler] Delay for `every` can not be less than 0!", true);
