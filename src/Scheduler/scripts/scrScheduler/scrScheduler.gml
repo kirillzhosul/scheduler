@@ -50,13 +50,14 @@
 // if disabled, may cause tasks not ticks, and other stuff.
 #macro SCHEDULER_SAFE_SCHEDULE_INIT true
 
-function schedule(callback, params=undefined){
+function schedule(callback, params=undefined, name=undefined){
 	/// @description Schedules given callback as scheduled task and returns it as schedule task structure (allowing you to chain*).
 	/// @param {function} callback Function that will be called when schedule triggered.
 	/// @param {any} params If != undefined, will be passed with callback.
+	/// @param {string} name Identifier to call by name.
 	if (SCHEDULER_SAFE_SCHEDULE_INIT) __scheduler_init();
 	
-	var scheduled_task = new __SchedulerTask(callback, params); // Create new task.
+	var scheduled_task = new __SchedulerTask(callback, name, params); // Create new task.
 	ds_list_add(global.__scheduler_tasks_list, scheduled_task); // Add task to scheduler list.
 	
 	return scheduled_task; // Return task to make chains.
@@ -84,19 +85,21 @@ function sprite_add_async(fname, imgnumb, removeback, smooth, xorig, yorig, call
 #region Delay / Time based.
 
 // Alias for schedule(callback, params).after(delay);
-function after(delay, callback, params=undefined){
+function after(delay, callback, params=undefined, name=undefined){
 	/// @description Calls callback, after delay amount of frames.
 	/// @param {function} callback Function that will be called when schedule triggered.
 	/// @param {any} params If != undefined, will be passed with callback.
-	return schedule(callback, params).after(delay);
+	/// @param {string} name Identifier to call by name.
+	return schedule(callback, params, name).after(delay);
 }
 
 // Alias for schedule(callback, params).every(delay);
-function every(delay, callback, params=undefined){
+function every(delay, callback, params=undefined, name=undefined){
 	/// @description Calls callback, every delay amount of frames.
 	/// @param {function} callback Function that will be called when schedule triggered.
 	/// @param {any} params If != undefined, will be passed with callback.
-	return schedule(callback, params).every(delay);
+	/// @param {string} name Identifier to call by name.
+	return schedule(callback, params, name).every(delay);
 }
 
 #endregion
@@ -104,47 +107,52 @@ function every(delay, callback, params=undefined){
 #region Async events.
 
 // Alias for schedule(callback, params).http(request_id);
-function http_async(request_id, callback, params=undefined){
+function http_async(request_id, callback, params=undefined, name=undefined){
 	/// @description Calls callback, after HTTP response is come.
 	/// @param {real} request_id Index of the HTTP request.
 	/// @param {function} callback Function that will be called when schedule triggered.
 	/// @param {any} params If != undefined, will be passed with callback.
-	return schedule(callback, params).http(request_id);
+	/// @param {string} name Identifier to call by name.
+	return schedule(callback, params, name).http(request_id);
 }
 
 // Alias for schedule(callback, params).steam(request_id);
-function steam_async(request_id, callback, params=undefined){
+function steam_async(request_id, callback, params=undefined, name=undefined){
 	/// @description Calls callback, after Steam response is come.
 	/// @param {real} request_id Index of the Steam request.
 	/// @param {function} callback Function that will be called when schedule triggered.
 	/// @param {any} params If != undefined, will be passed with callback.
+	/// @param {string} name Identifier to call by name.
 	return schedule(callback, params).steam(request_id);
 }
 
 // Alias for schedule(callback, params).buffer(request_id);
-function buffer_async(request_id, callback, params=undefined){
+function buffer_async(request_id, callback, params=undefined, name=undefined){
 	/// @description Calls callback, after buffer is loaden/saved.
 	/// @param {real} request_id Index of the Buffer request.
 	/// @param {function} callback Function that will be called when schedule triggered.
 	/// @param {any} params If != undefined, will be passed with callback.
+	/// @param {string} name Identifier to call by name.
 	return schedule(callback, params).buffer(request_id);
 }
 
 // Alias for schedule(callback, params).sprite(request_id);
-function sprite_async(sprite_add_id, callback, params=undefined){
+function sprite_async(sprite_add_id, callback, params=undefined, name=undefined){
 	/// @description Calls callback, after given sprite is finally loaden.
 	/// @param {real} sprite_add_id Index of the sprite add request.
 	/// @param {function} callback Function that will be called when schedule triggered.
 	/// @param {any} params If != undefined, will be passed with callback.
+	/// @param {string} name Identifier to call by name.
 	return schedule(callback, params).sprite(sprite_add_id);
 }
 
 // Alias for schedule(callback, params).dialog(dialog_id);
-function dialog_async(dialog_id, callback, params=undefined){
+function dialog_async(dialog_id, callback, params=undefined, name=undefined){
 	/// @description Calls callback, after given dialog is triggered.
 	/// @param {real} dialog Index of the async dialog request.
 	/// @param {function} callback Function that will be called when schedule triggered.
 	/// @param {any} params If != undefined, will be passed with callback.
+	/// @param {string} name Identifier to call by name.
 	return schedule(callback, params).dialog(dialog_id);
 }
 
@@ -178,13 +186,14 @@ function __scheduler_task_call(task, extra_params=undefined){
 
 // Scheduler task structure.
 // will be returned from `schedule()` and all chain operations (as `self`).
-function __SchedulerTask(callback, params=undefined) constructor{
+function __SchedulerTask(callback, params=undefined, name=undefined) constructor{
 	/// @param {function} callback Function that will be called when task executed.
 	/// @param {any} params Will be passed with callback.
+	/// @param {string} name Identifier to call by name.
 	
 	// Holds all private releated information.
 	// Should not be modified except scheduler core.
-	self.__container = new __SchedulerTaskContainer(callback, params);
+	self.__container = new __SchedulerTaskContainer(callback, name, params);
 	
 	// Chain operations.
 	
@@ -210,10 +219,14 @@ function __SchedulerTask(callback, params=undefined) constructor{
 
 // Scheduler task private container structure.
 // encapsulates data from `__SchedulerTask`.
-function __SchedulerTaskContainer(callback, params=undefined) constructor{
+function __SchedulerTaskContainer(callback, params=undefined, name=undefined) constructor{
 	/// @param {function} callback Function that will be called when task executed.
 	/// @param {any} params Will be passed with callback.
+	/// @param {string} name Identifier to call by name.
 	
+	// Identifier to call by name.
+	self.name = name;
+
 	// Callback information (`callback_function(callback_params)`).
 	self.callback_function = callback;
 	self.callback_params = params;
