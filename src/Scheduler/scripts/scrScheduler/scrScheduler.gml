@@ -63,6 +63,17 @@ function schedule(callback, params=undefined, name=undefined){
 	return scheduled_task; // Return task to make chains.
 }
 
+#region Other.
+
+function scheduler_get_all_tasks(){
+	/// @description Returns list of all current existing tasks. Very weird function, as getting all tasks not supposed for end-user.
+	/// @returns {array} Array of __SchedulerTask
+	if (SCHEDULER_SAFE_SCHEDULE_INIT) __scheduler_init();
+	return global.__scheduler_tasks_list;
+}
+
+#endregion
+
 #region Other aliases.
 
 function sprite_add_async(fname, imgnumb, removeback, smooth, xorig, yorig, callback, params=undefined){
