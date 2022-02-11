@@ -63,7 +63,7 @@ function schedule(callback, params=undefined, name=undefined){
 	return scheduled_task; // Return task to make chains.
 }
 
-#region Other.
+#region Getters.
 
 function scheduler_get_task(name=undefined){
 	/// @description Returns task by name or undefined if nothing found.
@@ -218,6 +218,9 @@ function __SchedulerTask(callback, params=undefined, name=undefined) constructor
 	// Holds all private releated information.
 	// Should not be modified except scheduler core.
 	self.__container = new __SchedulerTaskContainer(callback, name, params);
+	
+	// Other operations.
+	self.skip = __scheduler_task_operation_skip;
 	
 	// Chain operations.
 	
@@ -484,6 +487,8 @@ function __scheduler_on_async_call(request_name, request_id=undefined){
 
 #endregion
 
+#region Operations.
+
 #region Chain operations.
 
 function __scheduler_task_chain_operation_after(delay){
@@ -589,6 +594,29 @@ function __scheduler_task_chain_operation_every(delay){
 	
 	return self; // Returning chain.
 }
+
+#endregion
+
+#region Other operations.
+
+function __scheduler_task_operation_skip(){
+	/// @description Skips task, will removed after next frame tick.
+	
+	// Say to exec at next frame.
+	self.__container.time_left_after = 0;
+	
+	// Clearing time.
+	self.__container.time_left_every = 0;
+	self.__container.time_after = 0;
+	self.__container.time_every = 0;
+	
+	// Clearing callback.
+	self.__container.callback_function = function(){};
+	self.__container.callback_params = undefined;
+	
+}
+
+#endregion
 
 #endregion
 
