@@ -65,6 +65,19 @@ function schedule(callback, params=undefined, name=undefined){
 
 #region Other.
 
+function scheduler_get_task(name=undefined){
+	/// @description Returns task by name or undefined if nothing found.
+	/// @param {string} name Identifier to call by name.
+	/// @returns {__SchedulerTask or undefined} Found task or undefined if not found.
+	var tasks_count = ds_list_size(global.__scheduler_tasks_list);
+	for (var task_index = 0; task_index < tasks_count; task_index++){
+		var task = ds_list_find_value(global.__scheduler_tasks_list, task_index);
+		if (task.__container.name == name) return task;
+	}
+	
+	return undefined;
+}
+
 function scheduler_get_all_tasks(){
 	/// @description Returns list of all current existing tasks. Very weird function, as getting all tasks not supposed for end-user.
 	/// @returns {array} Array of __SchedulerTask
