@@ -5,24 +5,26 @@
 counter_every_fast = 0;
 counter_every_slow = 0;
 
+// Use this instead of room_speed as it is deprecated during to GM1024.
+var _second = game_get_speed(gamespeed_fps);
 
 // Slow counter, every 3 seconds.
 // *May use non-aliased syntax like below.
-every(room_speed * 3, function (){
+every(_second * 3, function (){
 	counter_every_slow++;
 })
 
 
 // Fast counter, every 1 second.
 // *May use non-aliased syntax like below.
-every(room_speed * 1, function (){
+every(_second * 1, function (){
 	counter_every_fast++;
 })
 
 
 // Delay message
 // *May use non-aliased syntax like below.
-after(room_speed * 2, function (){
+after(_second * 2, function (){
 	show_message_async("Message after 2 seconds!");
 })
 
