@@ -13,5 +13,5 @@
 - - Call function when `Dialog` is completed (function will give you result). [`scheduler(f).dialog_async(show_question_async(...))`]
 - - Call function when `Image` is loaden. [`scheduler(f).sprite_async(sprite_add(...))` OR `sprite_add_async(...)`]
 
-Read more at [Documentation](src/Scheduler/notes/SCHEDULER_DOCUMENTATION/SCHEDULER_DOCUMENTATION.txt)!  \
+Read more at [Documentation](https://github.com/kirillzhosul/gamemaker-scheduler/blob/main/src/Scheduler/notes/SCHEDULER_DOCUMENTATION/SCHEDULER_DOCUMENTATION.txt)!  \
 About GML async events [Official Documentation](https://docs2.yoyogames.com/source/_build/2_interface/1_editors/events/async_events.html)!
